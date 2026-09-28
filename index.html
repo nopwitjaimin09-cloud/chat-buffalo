@@ -14,7 +14,6 @@
 
         body {
             font-family: 'Prompt', sans-serif;
-            /* ทำให้พื้นหลังมีสีสันสดใสและเคลื่อนไหวเบาๆ ให้ความรู้สึกพรีเมียม */
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             background-size: 200% 200%;
             animation: gradientShift 10s ease infinite;
@@ -32,7 +31,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* กล่องการ์ดหลัก พร้อมรองรับเอฟเฟกต์ 3D Tilt ด้วย JavaScript */
         .card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
@@ -58,7 +56,6 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* โลโก้พร้อมลูกเล่นกระดอนเบาๆ และเงาเรืองแสงตอนเอาเมาส์ชี้ */
         .logo-container {
             position: relative;
             display: inline-block;
@@ -95,7 +92,6 @@
             font-weight: 300;
         }
 
-        /* ปุ่มดาวน์โหลดสไตล์พรีเมียม พร้อมลูกเล่นแสงวิ่ง (Shine) และเงาเรืองแสง */
         .download-btn {
             position: relative;
             overflow: hidden;
@@ -113,9 +109,10 @@
             box-shadow: 0 8px 25px rgba(0, 98, 230, 0.35);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             width: 100%;
+            cursor: pointer;
+            border: none;
         }
 
-        /* แสงสะท้อนวิ่งผ่านปุ่มเวลาเอาเมาส์ชี้ */
         .download-btn::after {
             content: '';
             position: absolute;
@@ -137,11 +134,6 @@
             background: linear-gradient(135deg, #0052c2, #2196f3);
         }
 
-        .download-btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* ไอคอนลูกศรขยับขึ้นลงได้ */
         .download-icon {
             display: inline-block;
             transition: transform 0.3s ease;
@@ -175,6 +167,131 @@
             display: inline-block;
             box-shadow: 0 0 8px #33AEFF;
         }
+
+        /* --- Modal ยืนยันตัวตน (Robot Verification) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        /* กล่องจำลอง reCAPTCHA */
+        .recaptcha-box {
+            background: #f9f9f9;
+            border: 2px solid #d3d3d3;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .recaptcha-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .recaptcha-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #0062E6;
+        }
+
+        .recaptcha-text {
+            font-size: 14px;
+            color: #333;
+            font-weight: 400;
+            text-align: left;
+        }
+
+        .recaptcha-logo {
+            font-size: 10px;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+        }
+
+        .modal-download-btn {
+            background: #ccc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 50px;
+            width: 100%;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+        }
+
+        .modal-download-btn.enabled {
+            background: linear-gradient(135deg, #0062E6 0%, #33AEFF 100%);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 98, 230, 0.3);
+        }
+
+        .modal-download-btn.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 98, 230, 0.4);
+        }
+
+        .close-modal {
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -187,32 +304,57 @@
         <h1>Chat Buffalo</h1>
         <p>โปรแกรมช่วยพิมพ์ข้อความแชสด่วน ใช้งานง่าย สะดวก รวดเร็ว ปลอดภัย</p>
         
-        <a href="Chat Buffalo.exe" class="download-btn" download>
+        <!-- ปุ่มกดดาวน์โหลดที่จะเรียก Modal ขึ้นมา -->
+        <button class="download-btn" id="openModalBtn">
             <span class="download-icon">📥</span> ดาวน์โหลดโปรแกรม (.exe)
-        </a>
+        </button>
 
         <div class="footer">
             <span class="windows-dot"></span> รองรับระบบปฏิบัติการ Windows
         </div>
     </div>
 
-    <!-- Script เพิ่มลูกเล่น 3D เอียงตามตำแหน่งเมาส์ -->
+    <!-- Modal ยืนยันตัวตน -->
+    <div class="modal-overlay" id="verifyModal">
+        <div class="modal-box">
+            <div class="modal-title">🔒 กรุณายืนยันตัวตนก่อนดาวน์โหลด</div>
+            
+            <div class="recaptcha-box">
+                <div class="recaptcha-left">
+                    <input type="checkbox" class="recaptcha-checkbox" id="robotCheck">
+                    <span class="recaptcha-text">ฉันไม่ใช่โปรแกรมอัตโนมัติ</span>
+                </div>
+                <div class="recaptcha-logo">
+                    <span>🛡️</span>
+                    <small>ChatVerify</small>
+                </div>
+            </div>
+
+            <button class="modal-download-btn" id="confirmDownloadBtn" disabled>ยืนยันและดาวน์โหลด</button>
+            <br>
+            <button class="close-modal" id="closeModalBtn">ยกเลิก</button>
+        </div>
+    </div>
+
+    <!-- Script สำหรับจัดการ 3D Effect และ ระบบติ๊กถูกยืนยัน -->
     <script>
         const card = document.getElementById('tiltCard');
+        const modal = document.getElementById('verifyModal');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const robotCheck = document.getElementById('robotCheck');
+        const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
 
+        // เอฟเฟกต์การ์ดเอียง 3D
         document.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
-
-            // คำนวณองศาการเอียง (ยิ่งหารเยอะยิ่งเอียงน้อยลง)
             const rotateX = (-y / 15);
             const rotateY = (x / 15);
-
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
-        // คืนรูปเดิมเมื่อเมาส์ออกจากหน้าจอ
         document.addEventListener('mouseleave', () => {
             card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
             card.style.transition = 'transform 0.5s ease';
@@ -220,6 +362,46 @@
 
         card.addEventListener('mouseenter', () => {
             card.style.transition = 'none';
+        });
+
+        // เปิด Modal เมื่อกดปุ่มดาวน์โหลด
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+            robotCheck.checked = false;
+            confirmDownloadBtn.classList.remove('enabled');
+            confirmDownloadBtn.disabled = true;
+        });
+
+        // ปิด Modal เมื่อกดยกเลิก
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // เปิดใช้งานปุ่มดาวน์โหลดจริงเมื่อติ๊กถูก
+        robotCheck.addEventListener('change', () => {
+            if (robotCheck.checked) {
+                confirmDownloadBtn.classList.add('enabled');
+                confirmDownloadBtn.disabled = false;
+            } else {
+                confirmDownloadBtn.classList.remove('enabled');
+                confirmDownloadBtn.disabled = true;
+            }
+        });
+
+        // เมื่อกดยืนยันใน Modal จะทำการดาวน์โหลดไฟล์จริง
+        confirmDownloadBtn.addEventListener('click', () => {
+            if (robotCheck.checked) {
+                // สร้างลิงก์หลอกเพื่อสั่งดาวน์โหลดไฟล์ Chat Buffalo.exe
+                const link = document.createElement('a');
+                link.href = 'Chat Buffalo.exe';
+                link.download = 'Chat Buffalo.exe';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // ปิด Modal
+                modal.classList.remove('active');
+            }
         });
     </script>
 
