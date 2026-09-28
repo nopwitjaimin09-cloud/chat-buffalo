@@ -4,99 +4,224 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ดาวน์โหลด Chat Buffalo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body {
             font-family: 'Prompt', sans-serif;
+            /* ทำให้พื้นหลังมีสีสันสดใสและเคลื่อนไหวเบาๆ ให้ความรู้สึกพรีเมียม */
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #333;
+            overflow: hidden;
         }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* กล่องการ์ดหลัก พร้อมรองรับเอฟเฟกต์ 3D Tilt ด้วย JavaScript */
         .card {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 45px 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
             text-align: center;
             max-width: 420px;
             width: 90%;
-            animation: fadeIn 0.8s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+
+        .card:hover {
+            box-shadow: 0 30px 60px rgba(0, 98, 230, 0.12), 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .logo {
-            width: 90px;
-            height: 90px;
+
+        /* โลโก้พร้อมลูกเล่นกระดอนเบาๆ และเงาเรืองแสงตอนเอาเมาส์ชี้ */
+        .logo-container {
+            position: relative;
+            display: inline-block;
             margin-bottom: 20px;
-            object-fit: contain;
-            border-radius: 18px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
+
+        .logo {
+            width: 95px;
+            height: 95px;
+            object-fit: contain;
+            border-radius: 22px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        .card:hover .logo {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 12px 25px rgba(0, 98, 230, 0.25);
+        }
+
         h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 600;
             color: #1a1a1a;
             margin-bottom: 10px;
+            letter-spacing: -0.5px;
         }
+
         p {
             font-size: 15px;
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             line-height: 1.6;
+            font-weight: 300;
         }
+
+        /* ปุ่มดาวน์โหลดสไตล์พรีเมียม พร้อมลูกเล่นแสงวิ่ง (Shine) และเงาเรืองแสง */
         .download-btn {
+            position: relative;
+            overflow: hidden;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
             background: linear-gradient(135deg, #0062E6 0%, #33AEFF 100%);
             color: white;
-            padding: 14px 28px;
+            padding: 16px 32px;
             font-size: 16px;
             font-weight: 600;
             text-decoration: none;
             border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0, 98, 230, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 98, 230, 0.35);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
         }
+
+        /* แสงสะท้อนวิ่งผ่านปุ่มเวลาเอาเมาส์ชี้ */
+        .download-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: 0.5s;
+        }
+
+        .download-btn:hover::after {
+            left: 100%;
+        }
+
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 98, 230, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 98, 230, 0.5);
+            background: linear-gradient(135deg, #0052c2, #2196f3);
         }
+
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* ไอคอนลูกศรขยับขึ้นลงได้ */
+        .download-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .download-btn:hover .download-icon {
+            animation: bounceDown 0.8s infinite alternate;
+        }
+
+        @keyframes bounceDown {
+            from { transform: translateY(0); }
+            to { transform: translateY(4px); }
+        }
+
         .footer {
             margin-top: 25px;
-            font-size: 12px;
-            color: #aaa;
+            font-size: 13px;
+            color: #888;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .windows-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #33AEFF;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #33AEFF;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <!-- เปลี่ยนคำว่า logo.png เป็นชื่อไฟล์รูปโลโก้ของคุณที่อัปโหลดไว้ใน GitHub -->
-        <img src="logo.png" alt="Chat Buffalo Logo" class="logo">
+    <div class="card" id="tiltCard">
+        <div class="logo-container">
+            <img src="logo.png" alt="Chat Buffalo Logo" class="logo">
+        </div>
         
         <h1>Chat Buffalo</h1>
         <p>โปรแกรมช่วยพิมพ์ข้อความแชสด่วน ใช้งานง่าย สะดวก รวดเร็ว ปลอดภัย</p>
         
-        <!-- เปลี่ยน Chat Buffalo.exe เป็นชื่อไฟล์โปรแกรมจริงของคุณ -->
         <a href="Chat Buffalo.exe" class="download-btn" download>
-            📥 ดาวน์โหลดโปรแกรม (.exe)
+            <span class="download-icon">📥</span> ดาวน์โหลดโปรแกรม (.exe)
         </a>
 
         <div class="footer">
-            รองรับระบบปฏิบัติการ Windows
+            <span class="windows-dot"></span> รองรับระบบปฏิบัติการ Windows
         </div>
     </div>
+
+    <!-- Script เพิ่มลูกเล่น 3D เอียงตามตำแหน่งเมาส์ -->
+    <script>
+        const card = document.getElementById('tiltCard');
+
+        document.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // คำนวณองศาการเอียง (ยิ่งหารเยอะยิ่งเอียงน้อยลง)
+            const rotateX = (-y / 15);
+            const rotateY = (x / 15);
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        // คืนรูปเดิมเมื่อเมาส์ออกจากหน้าจอ
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            card.style.transition = 'transform 0.5s ease';
+        });
+
+        card.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+        });
+    </script>
 
 </body>
 </html>
